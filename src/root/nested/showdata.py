@@ -43,7 +43,7 @@ class AnalogPlot:
         plt.ion() 
         self.axline, = plt.plot(analogData.ax)
         self.ayline, = plt.plot(analogData.ay)
-        plt.ylim([0, 1023])
+        plt.ylim([-2**23, 2**23])
 
     # update plot
     def update(self, analogData):
@@ -53,8 +53,8 @@ class AnalogPlot:
 
 # eeg-mouse specific data interpreter
 def decodeline(line):
-    hexstrings= [line[k:k+6] for k in range(10, len(line)-5, 6)]
-    data= [int(hexstr,16) for hexstr in hexstrings]
+    signed= lambda u : u - (0 if u < 2**23 else 2**24) 
+    data= [signed(int(line[k:k+6],16)) for k in range(10, len(line)-5, 6)]
     return data
     
 
@@ -81,7 +81,7 @@ def main():
         try:
             line = ser.readline()
             # data = [float(val) for val in line.split()]
-            data = decodeline(line)
+            data = decodeline(line)[:2]
             #print data
             if(len(data) == 2):
                 analogData.add(data)
