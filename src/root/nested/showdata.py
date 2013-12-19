@@ -53,7 +53,9 @@ class AnalogPlot:
 
 # eeg-mouse specific data interpreter
 def decodeline(line):
-    return line[10:-5]   # get rid of the [go]STATUS [on]\n
+    hexstrings= [line[k:k+6] for k in range(10, len(line)-5, 6)]
+    data= [int(hexstr,16) for hexstr in hexstrings]
+    return data
     
 
 # main() function
