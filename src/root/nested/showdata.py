@@ -17,10 +17,10 @@ from matplotlib import pyplot as plt
 # class that holds analog data for N samples
 class AnalogData:
     # constr
-    def __init__(self, maxLen):
-        self.ax = deque([0.0]*maxLen)
-        self.ay = deque([0.0]*maxLen)
+    def __init__(self, maxLen, channels=2):
+        self.a = [deque([0.0]*maxLen) for c in range(channels)]
         self.maxLen = maxLen
+        self.channels = channels
 
     # ring buffer
     def addToBuf(self, buf, val):
@@ -32,9 +32,9 @@ class AnalogData:
 
     # add data
     def add(self, data):
-        assert(len(data) == 2)
-        self.addToBuf(self.ax, data[0])
-        self.addToBuf(self.ay, data[1])
+        assert(len(data) == self.channels)
+        for c in range(self.channels):
+            self.addToBuf(self.a[c], data[c])
         
 # plot class
 class AnalogPlot:
@@ -42,14 +42,16 @@ class AnalogPlot:
     def __init__(self, analogData):
         # set plot to animated
         plt.ion() 
-        self.axline, = plt.plot(analogData.ax)
-        self.ayline, = plt.plot(analogData.ay)
+        self.aline = []
+        for c in range(len(analogData.a)):
+            self.aline.append(plt.plot(analogData.a[c])[0])
         plt.ylim([-2**23, 2**23])
 
     # update plot
     def update(self, analogData):
-        self.axline.set_ydata(analogData.ax)
-        self.ayline.set_ydata(analogData.ay)
+        for c in range(analogData.channels):
+            aline=self.aline[c]
+            aline.set_ydata(analogData.a[c])
         plt.draw()
 
 # eeg-mouse specific data interpreter
