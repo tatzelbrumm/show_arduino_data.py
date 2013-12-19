@@ -51,6 +51,11 @@ class AnalogPlot:
         self.ayline.set_ydata(analogData.ay)
         plt.draw()
 
+# eeg-mouse specific data interpreter
+def decodeline(line):
+    return line[10:-5]   # get rid of the [go]STATUS [on]\n
+    
+
 # main() function
 baudrate= 19200
 def main():
@@ -73,7 +78,8 @@ def main():
     while True:
         try:
             line = ser.readline()
-            data = [float(val) for val in line.split()]
+            # data = [float(val) for val in line.split()]
+            data = decodeline(line)
             #print data
             if(len(data) == 2):
                 analogData.add(data)
