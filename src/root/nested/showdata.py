@@ -42,16 +42,13 @@ class AnalogPlot:
     def __init__(self, analogData):
         # set plot to animated
         plt.ion() 
-        self.aline = []
-        for c in range(len(analogData.a)):
-            self.aline.append(plt.plot(analogData.a[c])[0])
+        self.aline = [plt.plot(aa)[0] for aa in analogData.a]
         plt.ylim([-2**23, 2**23])
 
     # update plot
     def update(self, analogData):
         for c in range(analogData.channels):
-            aline=self.aline[c]
-            aline.set_ydata(analogData.a[c])
+            self.aline[c].set_ydata(analogData.a[c])
         plt.draw()
 
 # eeg-mouse specific data interpreter
