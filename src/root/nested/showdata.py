@@ -70,7 +70,7 @@ def main():
     strPort = sys.argv[1];
 
     # plot parameters
-    analogData = AnalogData(100)
+    analogData = AnalogData(100, 8)
     analogPlot = AnalogPlot(analogData)
 
     print 'plotting data...'
@@ -81,9 +81,9 @@ def main():
         try:
             line = ser.readline()
             # data = [float(val) for val in line.split()]
-            data = decodeline(line)[:2]
+            data = decodeline(line)
             #print data
-            if(len(data) == 2):
+            if(len(data) == 8):
                 analogData.add(data)
                 analogPlot.update(analogData)
         except KeyboardInterrupt:
