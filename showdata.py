@@ -14,6 +14,40 @@ from time import sleep
 from collections import deque
 from matplotlib import pyplot as plt
 
+# timing stuff from udacity CS212
+import time
+
+def timedcall(fn, *args):
+    "Call function with args; return the time in seconds and result."
+    t0 = time.clock()
+    result = fn(*args)
+    t1 = time.clock()
+    return t1-t0, result
+
+def average(numbers):
+    "Return the average (arithmetic mean) of a sequence of numbers."
+    return sum(numbers) / float(len(numbers)) 
+
+def timedcalls(n, fn, *args):
+    """Call fn(*args) repeatedly: n times if n is an int, or up to
+    n seconds if n is a float; return the min, avg, and max time"""
+    if isinstance(n, int):
+        times= [timedcall(fn, *args)[0] for _ in range(n)] 
+    elif isinstance(n, float):
+        times= []        
+        t1= time.clock()
+        tstop= t1 + n
+        while t1 < tstop:
+            t0 = time.clock()
+            fn(*args)
+            t1= time.clock()
+            times.append(t1-t0)
+    else:
+        times= None
+    if times:
+        return min(times), average(times), max(times)
+
+
 # class that holds analog data for N samples
 class AnalogData:
     # constr
@@ -77,7 +111,11 @@ def main():
 
     # open serial port
     ser = serial.Serial(strPort, baudrate)
-    while True:
+    tstart = time.clock()
+    t = tstart
+    while t-tstart < 30.:
+        t = time.clock()
+        print t
         try:
             line = ser.readline()
             # data = [float(val) for val in line.split()]
