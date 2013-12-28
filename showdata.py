@@ -59,7 +59,7 @@ def decodeline(line):
     
 
 # main() function
-baudrate= 19200
+baudrate= 115200
 def main():
     # expects 1 arg - serial port string
     if(len(sys.argv) != 2):
