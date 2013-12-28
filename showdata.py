@@ -104,7 +104,7 @@ def main():
     strPort = sys.argv[1];
 
     # plot parameters
-    analogData = AnalogData(100, 8)
+    analogData = AnalogData(100, 1)
     analogPlot = AnalogPlot(analogData)
 
     print 'plotting data...'
@@ -113,15 +113,14 @@ def main():
     ser = serial.Serial(strPort, baudrate)
     tstart = time.clock()
     t = tstart
-    while t-tstart < 30.:
+    while t-tstart < 10.:
         t = time.clock()
-        print t
         try:
             line = ser.readline()
             # data = [float(val) for val in line.split()]
-            data = decodeline(line)
+            data = decodeline(line)[0:1]
             #print data
-            if(len(data) == 8):
+            if(len(data) == 1):
                 analogData.add(data)
                 analogPlot.update(analogData)
         except KeyboardInterrupt:
