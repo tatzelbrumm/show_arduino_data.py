@@ -105,7 +105,7 @@ def main():
 
     # plot parameters
     analogData = AnalogData(100, 8)
-    analogPlot = AnalogPlot(analogData)
+    #  analogPlot = AnalogPlot(analogData)
 
     print 'plotting data...'
 
@@ -121,8 +121,9 @@ def main():
             data = decodeline(line)
             #print data
             if(len(data) == 8):
-                analogData.add(data)
-                analogPlot.update(analogData)
+                # analogData.add(data)
+                # analogPlot.update(analogData)
+                print data
         except KeyboardInterrupt:
             print 'exiting'
             break
