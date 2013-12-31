@@ -106,7 +106,7 @@ def main():
 
     # plot parameters
     analogData = AnalogData(100, 8)
-    #  analogPlot = AnalogPlot(analogData)
+    analogPlot = AnalogPlot(analogData)
 
     print 'plotting data...'
 
@@ -123,10 +123,11 @@ def main():
             data = decodeline(line)
             timestamp= data[0]
             voltages= data[1:]
-            # if(len(data) == 8):
-                # analogData.add(data)
-                # analogPlot.update(analogData)
-            print (timestamp-prevtime, voltages)
+            if 8 == len(voltages):
+                analogData.add(voltages)
+                analogPlot.update(analogData)
+            if prevtime + 1 != timestamp:
+                print timestamp-prevtime
             prevtime = timestamp
         except KeyboardInterrupt:
             print 'exiting'
