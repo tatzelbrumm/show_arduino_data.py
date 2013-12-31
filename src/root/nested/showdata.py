@@ -88,7 +88,8 @@ class AnalogPlot:
 # eeg-mouse specific data interpreter
 def decodeline(line):
     signed= lambda u : u - (0 if u < 2**23 else 2**24) 
-    data= [signed(int(line[k:k+6],16)) for k in range(10, len(line)-5, 6)]
+#   data= [signed(int(line[k:k+6],16)) for k in range(10, len(line)-5, 6)]
+    data= signed(int(line[4:4+6],16))
     return data
     
 
@@ -120,10 +121,10 @@ def main():
             # data = [float(val) for val in line.split()]
             data = decodeline(line)
             #print data
-            if(len(data) == 8):
+            # if(len(data) == 8):
                 # analogData.add(data)
                 # analogPlot.update(analogData)
-                print data
+            print data
         except KeyboardInterrupt:
             print 'exiting'
             break
