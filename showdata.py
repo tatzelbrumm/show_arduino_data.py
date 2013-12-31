@@ -88,7 +88,8 @@ class AnalogPlot:
 # eeg-mouse specific data interpreter
 def decodeline(line):
     signed= lambda u : u - (0 if u < 2**23 else 2**24) 
-    data= [signed(int(line[k:k+6],16)) for k in range(10, len(line)-5, 6)]
+#   data= [signed(int(line[k:k+6],16)) for k in range(10, len(line)-5, 6)]
+    data= signed(int(line[4:4+6],16))
     return data
     
 
@@ -97,15 +98,15 @@ baudrate= 115200
 def main():
     # expects 1 arg - serial port string
     if(len(sys.argv) != 2):
-        print 'Example usage: python showdata.py "/dev/tty.usbmodem411"'
+        print 'Example usage: python showdata.py "/dev/ttyACM0"'
         exit(1)
 
     #strPort = '/dev/tty.usbserial-A7006Yqh'
     strPort = sys.argv[1];
 
     # plot parameters
-    analogData = AnalogData(100, 1)
-    analogPlot = AnalogPlot(analogData)
+    analogData = AnalogData(100, 8)
+    #  analogPlot = AnalogPlot(analogData)
 
     print 'plotting data...'
 
@@ -118,11 +119,12 @@ def main():
         try:
             line = ser.readline()
             # data = [float(val) for val in line.split()]
-            data = decodeline(line)[0:1]
+            data = decodeline(line)
             #print data
-            if(len(data) == 1):
-                analogData.add(data)
-                analogPlot.update(analogData)
+            # if(len(data) == 8):
+                # analogData.add(data)
+                # analogPlot.update(analogData)
+            print data
         except KeyboardInterrupt:
             print 'exiting'
             break
