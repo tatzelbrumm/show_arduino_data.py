@@ -114,21 +114,20 @@ def main():
     ser = serial.Serial(strPort, baudrate)
     tstart = time.clock()
     t = tstart
-    prevdata = 0
+    prevtime = 0
     while t-tstart < 30.: # run for max. 60 CPU seconds
         t = time.clock()
         try:
             line = ser.readline()
             # data = [float(val) for val in line.split()]
-            data = decodeline(line)[0]
-            #print data
+            data = decodeline(line)
+            timestamp= data[0]
+            voltages= data[1:]
             # if(len(data) == 8):
                 # analogData.add(data)
                 # analogPlot.update(analogData)
-            # print (t, tstart)
-            if prevdata+1 != data: 
-                print (prevdata, data)
-            prevdata = data
+            print (timestamp-prevtime, voltages)
+            prevtime = timestamp
         except KeyboardInterrupt:
             print 'exiting'
             break
