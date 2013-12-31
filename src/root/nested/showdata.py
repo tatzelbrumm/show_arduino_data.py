@@ -114,7 +114,8 @@ def main():
     ser = serial.Serial(strPort, baudrate)
     tstart = time.clock()
     t = tstart
-    while t-tstart < 10.:
+    prevdata = 0
+    while t-tstart < 30.: # run for max. 60 CPU seconds
         t = time.clock()
         try:
             line = ser.readline()
@@ -124,7 +125,10 @@ def main():
             # if(len(data) == 8):
                 # analogData.add(data)
                 # analogPlot.update(analogData)
-            print data
+            # print (t, tstart)
+            if prevdata+1 != data: 
+                print (prevdata, data)
+            prevdata = data
         except KeyboardInterrupt:
             print 'exiting'
             break
