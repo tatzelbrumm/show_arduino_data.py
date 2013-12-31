@@ -115,7 +115,7 @@ def main():
     tstart = time.clock()
     t = tstart
     prevtime = 0
-    while t-tstart < 30.: # run for max. 60 CPU seconds
+    while t-tstart < 120.: # run for max. 120 CPU seconds
         t = time.clock()
         try:
             line = ser.readline()
